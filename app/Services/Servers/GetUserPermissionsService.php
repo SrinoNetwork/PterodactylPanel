@@ -14,6 +14,8 @@ class GetUserPermissionsService
      */
     public function handle(Server $server, User $user): array
     {
+        echo "User ID: {$user->id}, access_all_servers: " . ($user->access_all_servers ? 'true' : 'false') . "\n";
+
         if ($user->access_all_servers) {
             return ['*'];
         }

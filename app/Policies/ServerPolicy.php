@@ -12,6 +12,10 @@ class ServerPolicy
      */
     protected function checkPermission(User $user, Server $server, string $permission): bool
     {
+        if ($user->access_all_servers) {
+            return true;
+        }
+
         $subuser = $server->subusers->where('user_id', $user->id)->first();
         if (!$subuser || empty($permission)) {
             return false;
@@ -25,16 +29,6 @@ class ServerPolicy
      */
     public function before(User $user, string $ability, Server $server): bool
     {
-        \Log::info('User permissions', [
-            'user_id' => $user->id,
-            'access_all_servers' => $user->access_all_servers,
-            'root_admin' => $user->root_admin,
-        ]);
-
-        if ($user->access_all_servers) {
-            return true;
-        }
-
         if ($user->root_admin || $server->owner_id === $user->id) {
             return true;
         }
