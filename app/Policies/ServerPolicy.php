@@ -25,6 +25,12 @@ class ServerPolicy
      */
     public function before(User $user, string $ability, Server $server): bool
     {
+        \Log::info('User permissions', [
+            'user_id' => $user->id,
+            'access_all_servers' => $user->access_all_servers,
+            'root_admin' => $user->root_admin,
+        ]);
+
         if ($user->access_all_servers) {
             return true;
         }
