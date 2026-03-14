@@ -121,9 +121,12 @@ class UserController extends Controller
      */
     public function update(UserFormRequest $request, User $user): RedirectResponse
     {
+        $data = $request->normalize();
+        $data['access_all_servers'] = $request->boolean('access_all_servers');
+
         $this->updateService
             ->setUserLevel(User::USER_LEVEL_ADMIN)
-            ->handle($user, $request->normalize());
+            ->handle($user, $data);
 
         $this->alert->success(trans('admin/user.notices.account_updated'))->flash();
 

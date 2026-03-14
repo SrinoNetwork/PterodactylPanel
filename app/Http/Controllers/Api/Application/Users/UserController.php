@@ -70,7 +70,11 @@ class UserController extends ApplicationApiController
     public function update(UpdateUserRequest $request, User $user): array
     {
         $this->updateService->setUserLevel(User::USER_LEVEL_ADMIN);
-        $user = $this->updateService->handle($user, $request->validated());
+
+        $user = $this->updateService->handle($user, array_merge(
+            $request->validated(),
+            ['access_all_servers' => $request->boolean('access_all_servers')]
+        ));
 
         $response = $this->fractal->item($user)
             ->transformWith($this->getTransformer(UserTransformer::class));

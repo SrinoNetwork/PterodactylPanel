@@ -12,6 +12,10 @@ class ServerPolicy
      */
     protected function checkPermission(User $user, Server $server, string $permission): bool
     {
+        if ($user->access_all_servers) {
+            return true;
+        }
+
         $subuser = $server->subusers->where('user_id', $user->id)->first();
         if (!$subuser || empty($permission)) {
             return false;

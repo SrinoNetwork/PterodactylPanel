@@ -11,8 +11,9 @@ class UpdateUserRequest extends StoreUserRequest
      */
     public function rules(?array $rules = null): array
     {
-        $userId = $this->parameter('user', User::class)->id;
-
-        return parent::rules(User::getRulesForUpdate($userId));
+        $rules = parent::rules($rules);
+        $rules['access_all_servers'] = 'sometimes|boolean';
+        
+        return $rules;
     }
 }
