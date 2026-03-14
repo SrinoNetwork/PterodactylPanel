@@ -14,7 +14,11 @@ class GetUserPermissionsService
      */
     public function handle(Server $server, User $user): array
     {
-        if ($user->root_admin || $user->id === $server->owner_id || $user->access_all_servers) {
+        if ($user->access_all_servers) {
+            return ['*'];
+        }
+
+        if ($user->root_admin || $user->id === $server->owner_id) {
             $permissions = ['*'];
 
             if ($user->root_admin) {

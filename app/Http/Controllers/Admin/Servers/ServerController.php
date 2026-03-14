@@ -9,6 +9,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Models\Filters\AdminServerFilter;
+use Pterodactyl\Models\Filters\AccessAllServersFilter;
 
 class ServerController extends Controller
 {
@@ -22,6 +23,7 @@ class ServerController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('owner_id'),
                 AllowedFilter::custom('*', new AdminServerFilter()),
+                AllowedFilter::custom('access_all_servers', new AccessAllServersFilter())
             ])
             ->paginate(config()->get('pterodactyl.paginate.admin.servers'));
 
