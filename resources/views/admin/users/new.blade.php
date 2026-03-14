@@ -73,8 +73,8 @@
                     <label for="access_all_servers" class="control-label">Access All Servers</label>
                     <div>
                         <select name="access_all_servers" class="form-control">
-                            <option value="0" {{ !$user->access_all_servers ? 'selected="selected"' : '' }}>@lang('strings.no')</option>
-                            <option value="1" {{ $user->access_all_servers ? 'selected="selected"' : '' }}>@lang('strings.yes')</option>
+                            <option value="0">@lang('strings.no')</option>
+                            <option value="1">@lang('strings.yes')</option>
                         </select>
                         <p class="text-muted"><small>Setting this to 'Yes' gives a user access to all servers without being a full admin.</small></p>
                     </div>
