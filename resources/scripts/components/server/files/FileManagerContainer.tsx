@@ -64,7 +64,7 @@ export default () => {
     return (
         <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
             <ErrorBoundary>
-                <div className={'hidden sm:block sm:col-span-2 lg:col-span-3 pr-4'}>
+                <div className={'sm:block sm:col-span-2 lg:col-span-3 pr-4'}>
                     <h1 className={'font-header font-medium text-2xl text-gray-50 leading-relaxed line-clamp-1'}>
                         {name}
                     </h1>
