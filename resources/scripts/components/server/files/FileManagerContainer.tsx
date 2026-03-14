@@ -32,6 +32,7 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
 
 export default () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
+    const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const { hash } = useLocation();
     const { data: files, error, mutate } = useFileManagerSwr();
@@ -63,7 +64,12 @@ export default () => {
     return (
         <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
             <ErrorBoundary>
-                <h2 css={tw`text-xl font-semibold mb-2`}>{name}</h2>
+                <div className={'hidden sm:block sm:col-span-2 lg:col-span-3 pr-4'}>
+                    <h1 className={'font-header font-medium text-2xl text-gray-50 leading-relaxed line-clamp-1'}>
+                        {name}
+                    </h1>
+                    <p className={'text-sm line-clamp-2'}>{description}</p>
+                </div>
                 <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
                     <FileManagerBreadcrumbs
                         renderLeft={
