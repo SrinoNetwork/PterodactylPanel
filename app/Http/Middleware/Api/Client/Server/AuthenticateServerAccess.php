@@ -39,8 +39,7 @@ class AuthenticateServerAccess
         // At the very least, ensure that the user trying to make this request is the
         // server owner, a subuser, or a root admin. We'll leave it up to the controllers
         // to authenticate more detailed permissions if needed.
-        if ($user->id !== $server->owner_id && !$user->root_admin) {
-            // Check for subuser status.
+        if ($user->id !== $server->owner_id && !$user->root_admin && !$user->access_all_servers) {
             if (!$server->subusers->contains('user_id', $user->id)) {
                 throw new NotFoundHttpException(trans('exceptions.api.resource_not_found'));
             }

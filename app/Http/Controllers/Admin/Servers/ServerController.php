@@ -19,9 +19,6 @@ class ServerController extends Controller
      */
     public function index(Request $request): View
     {
-        $user = $request->user();
-        echo "DEBUG: access_all_servers = " . ($user->access_all_servers ? 'true' : 'false') . "\n";
-
         $servers = QueryBuilder::for(Server::query()->with('node', 'user', 'allocation'))
             ->allowedFilters([
                 AllowedFilter::exact('owner_id'),
