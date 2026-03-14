@@ -31,6 +31,7 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
 };
 
 export default () => {
+    const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const { hash } = useLocation();
     const { data: files, error, mutate } = useFileManagerSwr();
@@ -62,6 +63,7 @@ export default () => {
     return (
         <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
             <ErrorBoundary>
+                <h2 css={tw`text-xl font-semibold mb-2`}>{name}</h2>
                 <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
                     <FileManagerBreadcrumbs
                         renderLeft={
