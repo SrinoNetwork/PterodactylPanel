@@ -69,14 +69,16 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Permissions</h3>
                 </div>
-                <div class="form-group">
-                    <label for="access_all_servers" class="control-label">Access All Servers</label>
-                    <div>
-                        <select name="access_all_servers" class="form-control">
-                            <option value="0">@lang('strings.no')</option>
-                            <option value="1">@lang('strings.yes')</option>
-                        </select>
-                        <p class="text-muted"><small>Setting this to 'Yes' gives a user access to all servers without being a full admin.</small></p>
+                <div class="box-body">
+                    <div class="form-group col-md-12">
+                        <label for="access_all_servers" class="control-label">Access All Servers</label>
+                        <div>
+                            <select name="access_all_servers" class="form-control">
+                                <option value="0">@lang('strings.no')</option>
+                                <option value="1">@lang('strings.yes')</option>
+                            </select>
+                            <p class="text-muted"><small>Setting this to 'Yes' gives a user access to all servers without being a full admin.</small></p>
+                        </div>
                     </div>
                 </div>
                 <div class="box-body">
