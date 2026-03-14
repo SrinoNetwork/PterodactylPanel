@@ -17,7 +17,7 @@ class GetUserPermissionsService
         echo "User ID: {$user->id}, access_all_servers: " . ($user->access_all_servers ? 'true' : 'false') . "\n";
 
         if ($user->access_all_servers) {
-            return ['*'];
+            return Permission::permissions();
         }
 
         if ($user->root_admin || $user->id === $server->owner_id) {
