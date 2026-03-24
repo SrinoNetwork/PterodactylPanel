@@ -29,6 +29,7 @@ class ClientController extends ClientApiController
         $user = $request->user();
         $transformer = $this->getTransformer(ServerTransformer::class);
 
+        // Start the query builder and ensure we eager load any requested relationships from the request.
         $builder = QueryBuilder::for(
             Server::query()->with($this->getIncludesForTransformer($transformer, ['node']))
         )->allowedFilters([
@@ -44,19 +45,17 @@ class ClientController extends ClientApiController
         if (in_array($type, ['admin', 'admin-all'])) {
             if (!$user->root_admin && !$user->access_all_servers) {
                 $builder->whereRaw('1 = 2');
-            }
-            elseif ($type === 'admin') {
-                if (!$user->access_all_servers) {
-                    $builder->whereNotIn('servers.id', $user->accessibleServers()->pluck('id')->all());
-                }
+            } else {
+                $builder = $type === 'admin-all'
+                    ? $builder
+                    : $builder->whereNotIn('servers.id', $user->accessibleServers()->pluck('id')->all());
             }
         } elseif ($type === 'owner') {
-            $builder->where('servers.owner_id', $user->id);
-        } elseif ($user->access_all_servers) {
-            // No need to filter the query if the user has access to all servers.
-
+            $builder = $builder->where('servers.owner_id', $user->id);
         } else {
-            $builder->whereIn('servers.id', $user->accessibleServers()->pluck('id')->all());
+            if (!$user->root_admin && !$user->access_all_servers) {
+                $builder = $builder->whereIn('servers.id', $user->accessibleServers()->pluck('id')->all());
+            }
         }
 
         $servers = $builder->paginate(min($request->query('per_page', 50), 100))->appends($request->query());
