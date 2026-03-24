@@ -41,9 +41,14 @@ class ClientController extends ClientApiController
         ]);
 
         $type = $request->input('type');
-
+        // Either return all the servers the user has access to because they are an admin `?type=admin` or
+        // just return all the servers the user has access to because they are the owner or a subuser of the
+        // server. If ?type=admin-all is passed all servers on the system will be returned to the user, rather
+        // than only servers they can see because they are an admin.
         if (in_array($type, ['admin', 'admin-all'])) {
-            if (!$user->root_admin) {
+            // If they aren't an admin but want all the admin servers don't fail the request, just
+            // make it a query that will never return any results back.
+            if (!$user->root_admin && !$user->access_all_servers) {
                 $builder->whereRaw('1 = 2');
             } else {
                 $builder = $type === 'admin-all'
@@ -53,9 +58,7 @@ class ClientController extends ClientApiController
         } elseif ($type === 'owner') {
             $builder = $builder->where('servers.owner_id', $user->id);
         } else {
-            if (!$user->root_admin) {
-                $builder = $builder->whereIn('servers.id', $user->accessibleServers()->pluck('id')->all());
-            }
+            $builder = $builder->whereIn('servers.id', $user->accessibleServers()->pluck('id')->all());
         }
 
         $servers = $builder->paginate(min($request->query('per_page', 50), 100))->appends($request->query());
