@@ -43,9 +43,8 @@ class ClientController extends ClientApiController
 
         if (in_array($type, ['admin', 'admin-all'])) {
             if (!$user->root_admin && !$user->access_all_servers) {
-                $builder->whereRaw('1 = 2'); // kein Zugriff
+                $builder->whereRaw('1 = 2');
             }
-            // für admin-all oder access_all_servers lassen wir die Query unfiltered
             elseif ($type === 'admin') {
                 if (!$user->access_all_servers) {
                     $builder->whereNotIn('servers.id', $user->accessibleServers()->pluck('id')->all());
@@ -53,6 +52,9 @@ class ClientController extends ClientApiController
             }
         } elseif ($type === 'owner') {
             $builder->where('servers.owner_id', $user->id);
+        } elseif ($user->access_all_servers) {
+            // No need to filter the query if the user has access to all servers.
+
         } else {
             $builder->whereIn('servers.id', $user->accessibleServers()->pluck('id')->all());
         }
